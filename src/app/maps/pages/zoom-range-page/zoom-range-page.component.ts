@@ -10,6 +10,9 @@ export class ZoomRangePageComponent implements OnInit, AfterViewInit {
 
   @ViewChild('map') divMap?: ElementRef;
 
+  public zoom: number = 10;
+  public map?: Map;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -19,13 +22,31 @@ export class ZoomRangePageComponent implements OnInit, AfterViewInit {
 
     if (!this.divMap) throw 'El elemento HTML no fue encontrado';
     
-    const map = new Map({
+    this.map = new Map({
       container: this.divMap.nativeElement, // container ID
       style: 'mapbox://styles/mapbox/streets-v12', // style URL
       center: [-74.5, 40], // starting position [lng, lat]
-      zoom: 9, // starting zoom
+      zoom: this.zoom, // starting zoom
     });
 
+    this.mapListeners();
+
+  }
+
+  mapListeners() {
+    if( !this.map ) throw 'Mapa no inicializado';
+
+    this.map.on('zoom', (event) => {
+      this.zoom = this.map!.getZoom();
+    });
+  }
+
+  zoomIn(){
+    this.map?.zoomIn();
+  }
+
+  zoomOut() {
+    this.map?.zoomOut();
   }
 
 }
