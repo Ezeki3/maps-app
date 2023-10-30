@@ -10,6 +10,8 @@
       min="-2"
       max="18"
       [value]="zoom"
+      (input)="zoomChanged( zoomInput.value )"
+      #zoomInput
     >
 
     <button class="btn btn-primary" (click)="zoomIn()"> + </button>
