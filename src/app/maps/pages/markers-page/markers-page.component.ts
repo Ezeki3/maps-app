@@ -7,6 +7,11 @@ interface MarkerAndColor{
   colorText: string,
 }
 
+interface PlainMarker {
+  color: string;
+  lngLat: number[];
+}
+
 @Component({
   selector: 'app-markers-page',
   templateUrl: './markers-page.component.html',
@@ -38,6 +43,8 @@ export class MarkersPageComponent implements OnInit {
       zoom: 10, // starting zoom
     });
 
+    this.readFromLocalStorage();
+
     // const markerHtml = document.createElement('div');
     // markerHtml.innerHTML = 'PUNTO'
     // // markerHtml.style.backgroundImage = "url('/assets/images/marker_red.png')";
@@ -57,6 +64,7 @@ export class MarkersPageComponent implements OnInit {
     const lngLat = this.map.getCenter();
     
     this.addMarker( lngLat, color );
+
   }
 
   addMarker( lngLat: LngLat, color:string ){
@@ -72,8 +80,6 @@ export class MarkersPageComponent implements OnInit {
       color: color,
       draggable: true
     }).setLngLat( lngLat ).addTo( this.map );
-
-    // this.markers.push({ color, marker });
     
     //agregar el color del texto al marcador
     this.markers.push({
@@ -81,6 +87,8 @@ export class MarkersPageComponent implements OnInit {
       colorText,
       marker: marker
     });
+
+    this.saveToLocalStorage();
   }
 
   deleteMarker( index: number){
@@ -95,5 +103,28 @@ export class MarkersPageComponent implements OnInit {
     });
   }
 
-  
+  saveToLocalStorage() {
+    const plainMarkers: PlainMarker[] = this.markers.map( ({ color, marker}) => {
+      return {
+        color,
+        lngLat: marker.getLngLat().toArray()
+      }
+    });
+
+    localStorage.setItem('plainMarkers', JSON.stringify( plainMarkers));
+
+  }
+
+  readFromLocalStorage() {
+    const plainMarkersString = localStorage.getItem('plainMarkers') ?? '[]';
+    const plainMarkers: PlainMarker[] = JSON.parse( plainMarkersString );
+
+    plainMarkers.forEach( ({color, lngLat}) =>{
+      const [lng, lat] = lngLat;
+      const coords = new LngLat( lng, lat );
+
+      this.addMarker( coords, color);
+
+    })
+  }
 }
