@@ -89,6 +89,8 @@ export class MarkersPageComponent implements OnInit {
     });
 
     this.saveToLocalStorage();
+
+    marker.on('dragend', () => this.saveToLocalStorage() );
   }
 
   deleteMarker( index: number){
