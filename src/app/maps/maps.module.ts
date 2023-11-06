@@ -10,6 +10,8 @@ import { MarkersPageComponent } from './pages/markers-page/markers-page.componen
 import { PropertiesPageComponent } from './pages/properties-page/properties-page.component';
 import { ZoomRangePageComponent } from './pages/zoom-range-page/zoom-range-page.component';
 
+import { CounterAloneComponent } from '../alone/components/counter-alone/counter-alone.component';
+
 import * as mapboxgl from 'mapbox-gl';
 (mapboxgl as any).accessToken = 'pk.eyJ1IjoiYnlyb245IiwiYSI6ImNsbzRuaGxneTAzNnMyam1wN3Ixb2tmNjQifQ.agmBURIJruoOt_Ywprb7OA';
 
@@ -25,7 +27,8 @@ import * as mapboxgl from 'mapbox-gl';
   ],
   imports: [
     CommonModule,
-    MapsRoutingModule
+    MapsRoutingModule,
+    CounterAloneComponent,
   ]
 })
 export class MapsModule { }
